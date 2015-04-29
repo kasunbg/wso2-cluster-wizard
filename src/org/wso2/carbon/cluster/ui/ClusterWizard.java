@@ -509,8 +509,13 @@ public class ClusterWizard extends javax.swing.JFrame {
     private void populateDBWithScripts(Connection con, String dbName) throws Exception {
         if (!DBConnection.dbAlreadyExists(con, dbName)) {
             DBConnection.createDatabase(con, dbName);
+        DBConnection.useDatabase(con, dbName);
+        DBConnection.runScript(con, new File(getMgrSQLScriptFilePath()));
+
         } else {
-            int option = JOptionPane.showConfirmDialog(null, dbName
+            logMessage("INFO :: " + dbName
+                    + " DB already exists, so not creating a new one...!!! ");
+/*            int option = JOptionPane.showConfirmDialog(null, dbName
                     + " DB already exists and it will be Dropped...!!! ", "Warning", JOptionPane.WARNING_MESSAGE);
             if (option == JOptionPane.OK_OPTION) {
                 DBConnection.dropDatabase(con, dbName);
@@ -519,10 +524,11 @@ public class ClusterWizard extends javax.swing.JFrame {
                 logMessage("ERROR :: Aborting cluster Wizard, DB Already Exists " + dbName);
                 throw new Exception(dbName + " Already Exisits..!!!");
             }
+*/
         }
         //run script file
-        DBConnection.useDatabase(con, dbName);
-        DBConnection.runScript(con, new File(getMgrSQLScriptFilePath()));
+//        DBConnection.useDatabase(con, dbName);
+//        DBConnection.runScript(con, new File(getMgrSQLScriptFilePath()));
         //DBConnection.grantPermission(con, dbName, regDbUsername.getText(), regHostName.getText());
     }
 
